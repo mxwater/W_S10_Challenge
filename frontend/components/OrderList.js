@@ -15,7 +15,7 @@ export default function OrderList() {
 
   return (
     <div id="orderList">
-      <h2>Pizza Orders</h2>
+      
       <ol>
         {filteredOrders.map((order) => (
           <li key={order.id}>
@@ -27,22 +27,6 @@ export default function OrderList() {
           </li>
         ))}
       </ol>
-      <div id="sizeFilters">
-        Filter by size:
-        {['All', 'S', 'M', 'L'].map((size) => {
-          const className = `button-filter${size === filter ? ' active' : ''}`
-          return (
-            <button
-              data-testid={`filterBtn${size}`}
-              className={className}
-              key={size}
-              onClick={() => dispatch(setFilter(size))}
-            >
-              {size}
-            </button>
-          )
-        })}
-      </div>
     </div>
   )
 }
