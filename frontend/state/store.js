@@ -1,18 +1,45 @@
 import { configureStore } from '@reduxjs/toolkit'
+import { setupListeners } from '@reduxjs/toolkit/query/react'
+import { pizzaApi } from './pizzaApi'
+import filterReducer from './filterSlice'
 
-const exampleReducer = (state = { count: 0 }) => {
-  return state
-}
-
-export const resetStore = () => configureStore({
+const createStore = () => configureStore({
   reducer: {
-    example: exampleReducer,
-    // add your reducer(s) here
+    [pizzaApi.reducerPath]: pizzaApi.reducer,
+    filter: filterReducer,
   },
-  middleware: getDefault => getDefault().concat(
-    // if using RTK Query for your networking: add your middleware here
-    // if using Redux Thunk for your networking: you can ignore this
-  ),
+  middleware: (getDefaultMiddleware) =>
+    getDefaultMiddleware().concat(pizzaApi.middleware),
 })
 
-export const store = resetStore()
+const store = createStore()
+
+setupListeners(store.dispatch)
+
+export const resetStore = () => {
+  const newStore = createStore()
+  setupListeners(newStore.dispatch)
+  return newStore
+}
+
+export { store }
+export default store
+
+
+
+// const exampleReducer = (state = { count: 0 }) => {
+//   return state
+// }
+
+// export const resetStore = () => configureStore({
+//   reducer: {
+//     example: exampleReducer,
+//     [pizzaApi.reducerPath]: pizzaApi.reducer,
+//   },
+//   middleware: getDefaultMiddleware =>
+//     getDefaultMiddleware().concat(pizzaApi.middleware),
+// })
+
+// setupListeners(resetStore().dispatch)
+
+// export const store = resetStore()
