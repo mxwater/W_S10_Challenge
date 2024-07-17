@@ -1,23 +1,39 @@
-import React from 'react'
-import { useGetOrdersQuery } from '../state/pizzaApi'
+import React from 'react';
 
-export default function OrderList({ orders, filter }) {
-  const filteredOrders = filter === 'All' ? orders : orders.filter(order => order.size === filter)
+const OrderList = ({ orders }) => {
+  const renderToppings = (toppingIds) => {
+    const toppingNames = toppingIds.map(id => {
+      switch (id) {
+        case '1':
+          return 'Pepperoni';
+        case '2':
+          return 'Green Peppers';
+        case '3':
+          return 'Pineapple';
+        case '4':
+          return 'Mushrooms';
+        case '5':
+          return 'Ham';
+        default:
+          return '';
+      }
+    });
+    return toppingNames.join(', ');
+  };
 
   return (
-    <div id="orderList">
-      <h2>Pizza Orders</h2>
-      <ol>
-        {filteredOrders.map((order, index) => (
-          <li key={index}>
-            {order.customer} ordered a size {order.size} pizza with {
-              order.toppings && order.toppings.length > 0
-                ? `${order.toppings.length} topping${order.toppings.length > 1 ? 's' : ''}`
-                : 'no toppings'
-            }
-          </li>
-        ))}
-      </ol>
-    </div>
-  )
-}
+    <ol>
+      {orders.map((order) => (
+        <li key={order.id}>
+          {`${order.fullName} ordered a size ${order.size} with ${
+            order.toppings.length > 0
+              ? renderToppings(order.toppings)
+              : 'no toppings'
+          }`}
+        </li>
+      ))}
+    </ol>
+  );
+};
+
+export default OrderList;
